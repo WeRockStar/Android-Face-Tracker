@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.cameraview.CameraView;
+import com.google.android.gms.vision.MultiProcessor;
+import com.google.android.gms.vision.face.FaceDetector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CameraView mCameraView;
     private Button btnTake;
+    private FaceDetector detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +28,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mCameraView = (CameraView) findViewById(R.id.cameraview);
-
         btnTake = (Button) findViewById(R.id.btnTake);
 
+        detector = new FaceDetector.Builder(this)
+                .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+                .build();
+        
         btnTake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
