@@ -19,14 +19,7 @@
         app:aspectRatio="4:3"
         app:autoFocus="true"
         app:facing="back"
-        app:flash="auto">
-
-        <com.werockstar.androidfacetracker.GraphicOverlay
-            android:id="@+id/faceOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.google.android.cameraview.CameraView>
+        app:flash="auto" />
 
     <Button
         android:id="@+id/btnTake"
@@ -34,6 +27,6 @@
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.5"
-        android:text="Take Phone" />
+        android:text="@string/take_phone" />
 
 </LinearLayout>

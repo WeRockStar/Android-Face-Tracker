@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidFaceTracker</string>
+    <string name="take_phone">Take Phone</string>
 </resources>
