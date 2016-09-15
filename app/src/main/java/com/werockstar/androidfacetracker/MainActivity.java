@@ -30,16 +30,22 @@ public class MainActivity extends AppCompatActivity {
         mCameraView = (CameraView) findViewById(R.id.cameraview);
         btnTake = (Button) findViewById(R.id.btnTake);
 
-        detector = new FaceDetector.Builder(this)
-                .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
-                .build();
-        
+        mCameraView.addCallback(new CameraManager().callback);
+
         btnTake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCameraView.takePicture();
             }
         });
+
+        createFaceDetection();
+    }
+
+    private void createFaceDetection() {
+        detector = new FaceDetector.Builder(this)
+                .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+                .build();
     }
 
     @Override

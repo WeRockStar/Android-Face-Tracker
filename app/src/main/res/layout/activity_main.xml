@@ -27,6 +27,6 @@
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.5"
-        android:text="@string/take_phone" />
+        android:text="@string/take_photo" />
 
 </LinearLayout>
