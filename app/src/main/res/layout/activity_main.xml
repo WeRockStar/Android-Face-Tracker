@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -12,8 +12,8 @@
     <com.google.android.cameraview.CameraView
         android:id="@+id/cameraview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4.5"
+        android:layout_height="400dp"
+        android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:keepScreenOn="true"
         app:aspectRatio="4:3"
@@ -24,9 +24,17 @@
     <Button
         android:id="@+id/btnTake"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cameraview"
+        android:layout_centerHorizontal="true"
         android:text="@string/take_photo" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/ivResult"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginBottom="4dp"
+        android:adjustViewBounds="true"
+        android:background="@null" />
+
+</RelativeLayout>
