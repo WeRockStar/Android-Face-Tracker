@@ -1,68 +1,41 @@
 package com.werockstar.androidfacetracker;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.hardware.camera2.CameraManager;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.cameraview.CameraView;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.face.Face;
-import com.google.android.gms.vision.face.FaceDetector;
+import com.werockstar.androidfacetracker.presenter.MainPresenterImpl;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainPresenterImpl.View {
 
     private static final int REQUEST_CAMERA_PERMISSION = 1;
 
     private CameraView mCameraView;
     private Button btnTake;
-    private FaceDetector detector;
-    private ImageView ivResult;
-    public static final String EXTRA_BYTE = "EXTRA_BYTE";
+    public static final String EXTRA_PHOTO = "EXTRA_PHOTO";
+    private ProgressDialog progress;
+    private MainPresenterImpl presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        presenter = new MainPresenterImpl(this);
+        progress = new ProgressDialog(MainActivity.this);
         mCameraView = (CameraView) findViewById(R.id.cameraview);
         btnTake = (Button) findViewById(R.id.btnTake);
-        ivResult = (ImageView) findViewById(R.id.ivResult);
 
-        createFaceDetection();
-
-        btnTake.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCameraView.takePicture();
-            }
-        });
-    }
-
-    private void createFaceDetection() {
-        detector = new FaceDetector.Builder(this)
-                .setTrackingEnabled(false)
-                .build();
+        btnTake.setOnClickListener(v -> mCameraView.takePicture());
     }
 
     @Override
@@ -123,7 +96,44 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPictureTaken(final CameraView cameraView, final byte[] data) {
-            
+            presenter.convertBitmapToStream(data);
         }
     };
+
+
+    private void goOnResult(byte[] bytes) {
+        Intent intentToResultActivity = new Intent(MainActivity.this, ResultActivity.class);
+        intentToResultActivity.putExtra(EXTRA_PHOTO, bytes);
+        startActivity(intentToResultActivity);
+    }
+
+
+    @Override
+    public void takePhotoSuccess(byte[] data) {
+        goOnResult(data);
+    }
+
+    @Override
+    public void takePhotoError() {
+
+    }
+
+    @Override
+    public void displayLoading() {
+        progress.setMessage("Please wait...");
+        progress.setIndeterminate(true);
+        progress.show();
+    }
+
+    @Override
+    public void dismissLoading() {
+        progress.cancel();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        presenter.onStop();
+    }
 }
