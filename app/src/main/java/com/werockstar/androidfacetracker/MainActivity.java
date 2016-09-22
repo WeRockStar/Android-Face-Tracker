@@ -8,12 +8,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.hardware.camera2.CameraManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         btnTake = (Button) findViewById(R.id.btnTake);
         ivResult = (ImageView) findViewById(R.id.ivResult);
 
-        mCameraView.addCallback(callback);
         createFaceDetection();
 
         btnTake.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +70,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if (hasGrantCameraPermission()) {
-            mCameraView.start();
+            try {
+                mCameraView.start();
+                mCameraView.addCallback(callback);
+            } catch (Exception e) {
+                btnTake.setEnabled(false);
+                Log.d(MainActivity.class.getSimpleName(), e.getMessage());
+            }
         } else {
             requestCameraPermission();
         }
@@ -93,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -117,16 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPictureTaken(final CameraView cameraView, final byte[] data) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inMutable = true;
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-
-                }
-            });
+            
         }
     };
 }
