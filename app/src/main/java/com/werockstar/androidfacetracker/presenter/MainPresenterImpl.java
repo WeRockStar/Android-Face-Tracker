@@ -1,7 +1,5 @@
 package com.werockstar.androidfacetracker.presenter;
 
-import android.util.Log;
-
 import com.werockstar.androidfacetracker.util.BitmapUtil;
 
 import rx.Observable;

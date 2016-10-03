@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:keepScreenOn="true"
-        app:aspectRatio="4:3"
+        app:aspectRatio="16:9"
         app:autoFocus="true"
         app:facing="back"
         app:flash="auto" />
